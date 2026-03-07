@@ -27,6 +27,8 @@
 </head>
 
 <body class="bg-[#F8FAFC] min-h-screen">
+
+    <!-- Navabr  -->
     <nav class=" bg-white py-5 shadow-sm">
         <div class=" flex justify-between w-11/12 mx-auto">
             <div class="flex items-center gap-2">
@@ -53,6 +55,82 @@
         </div>
     </nav>
 
+
+    <section class="w-11/12 mx-auto mt-[30px] ">
+
+        <!-- button section  -->
+        <section class="bg-base-100 p-6 space-x-2 shadow-sm rounded-sm">
+            <button class="btn btn-primary w-[120px]">All</button>
+            <button class="btn  w-[120px] text-[#64748B]">Open</button>
+            <button class="btn  w-[120px] text-[#64748B]">Closed</button>
+        </section>
+
+
+        <section class="bg-base-100 p-6 space-x-2 shadow-sm rounded-t-md mt-8">
+            <!-- issues summary section -->
+            <div class="flex justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="bg-[#ECE4FF] p-2 rounded-full"><img src="./assets/Aperture.png" alt=""></div>
+                    <div>
+                        <h2 class="font-semibold text-[20px]"> 50 Issues</h2>
+                        <p class="text-[#64748B]">Track and manage your project issues</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <div class="w-[12px] h-[12px] bg-green-600 rounded-full"></div>
+                    <p>Open</p>
+                    <div class="w-[12px] h-[12px] bg-violet-600 rounded-full"></div>
+                    <p>Closed</p>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="bg-[#FBFBFB] border-t-2 border-gray-200">
+
+            <!-- issues cards  -->
+
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-4 shadow-md rounded-b-md">
+                <!-- cards display here from api -->
+                 
+                <div
+                    class="bg-base-100 p-6 rounded-sm border-t-4 border-green-500 shadow-lg cursor-pointer transition-all duration-500 hover:scale-105">
+                    <div class="flex justify-between">
+                        <div>
+                            <img src="./assets/Open-Status.png" alt="">
+                        </div>
+                        <div class="">
+                            <p class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px]">HIGH</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <h2 class="font-semibold text-[14px]">Fix navigation menu on mobile devices</h2>
+                        <p class="text-[#64748B] text-[12px]">The navigation menu doesn't collapse properly on mobile
+                            devices...</p>
+                        <div class="flex gap-2">
+                            <div
+                                class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-red-600">
+                                <i class="fa-solid fa-bug"></i>
+                                <p>BUG</p>
+                            </div>
+                            <div
+                                class="flex gap-1 items-center px-2 py-1 bg-yellow-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-[#D97706]">
+                                <i class="fa-regular fa-circle-stop"></i>
+                                <p class="uppercase">help wanted</p>
+                            </div>
+                        </div>
+                        <div class="divider "></div>
+                        <div class="text-[#64748B]">
+                            <p>#1 by john_doe </p>
+                            <p> 1/15/2024</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </section>
 
 </body>
 
