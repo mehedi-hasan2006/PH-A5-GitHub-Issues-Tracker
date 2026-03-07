@@ -86,13 +86,12 @@
         </section>
 
 
-        <section class="bg-[#FBFBFB] border-t-2 border-gray-200">
+        <section class="bg-[#FBFBFB] border-t-2 border-gray-200 pb-[100px]">
 
             <!-- issues cards  -->
-
-            <div class="p-6 grid grid-cols-1 lg:grid-cols-4 shadow-md rounded-b-md">
+            <div id="allIssuesCards" class="p-6 grid grid-cols-1 lg:grid-cols-4 gap-5 shadow-md rounded-b-md ">
                 <!-- cards display here from api -->
-                 
+
                 <div
                     class="bg-base-100 p-6 rounded-sm border-t-4 border-green-500 shadow-lg cursor-pointer transition-all duration-500 hover:scale-105">
                     <div class="flex justify-between">
@@ -103,8 +102,8 @@
                             <p class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px]">HIGH</p>
                         </div>
                     </div>
-                    <div class="space-y-3">
-                        <h2 class="font-semibold text-[14px]">Fix navigation menu on mobile devices</h2>
+                    <div class="space-y-2 mt-2">
+                        <h2 class="font-semibold text-[16px]">Fix navigation menu on mobile devices</h2>
                         <p class="text-[#64748B] text-[12px]">The navigation menu doesn't collapse properly on mobile
                             devices...</p>
                         <div class="flex gap-2">
@@ -131,6 +130,8 @@
 
         </section>
     </section>
+
+    <script src="./js/home.js"></script>
 
 </body>
 
