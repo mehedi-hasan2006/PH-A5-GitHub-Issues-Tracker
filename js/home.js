@@ -55,7 +55,7 @@ const displayAllIssues = (cards) => {
   cards.forEach((card) => {
     let createElement = document.createElement("div");
     createElement.innerHTML = `
-        <div id="issueCard" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.priority)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
+        <div id="issueCard" onclick="fetchIssueForModal(${card.id})" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.priority)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
                     <div class="flex justify-between">
                           <div>
                               ${showStatusIcon(card.priority)}
@@ -105,11 +105,11 @@ const showStatusIcon = (status) => {
 // function for show status high medium low
 const showStatus = (st) => {
   if (st === "high") {
-    return `<p id="high" class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px] uppercase">HIGH</p>`;
+    return `<span id="high" class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px] uppercase">HIGH</span>`;
   } else if (st === "low") {
-    return `<p id="low" class="text-[#9CA3AF]  px-4 py-1 bg-[#EEEFF2] rounded-full font-medium text-[12px] uppercase"> low </p>`;
+    return `<span id="low" class="text-[#9CA3AF]  px-4 py-1 bg-[#EEEFF2] rounded-full font-medium text-[12px] uppercase"> low </span>`;
   } else {
-    return `<p id="medium" class="text-[#F59E0B]  px-4 py-1 bg-[#FFF6D1] rounded-full font-medium text-[12px] uppercase"> medium </p>`;
+    return `<span id="medium" class="text-[#F59E0B]  px-4 py-1 bg-[#FFF6D1] rounded-full font-medium text-[12px] uppercase"> medium </span>`;
   }
 };
 
@@ -121,14 +121,14 @@ const showLabes = (label) => {
     if (lab === "bug") {
       return `
     <div
-                                class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-red-600">
+                                class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-red-600">
                                 <i class="fa-solid fa-bug"></i>
                                 <p>BUG</p>
                             </div>`;
     } else if (lab === "help wanted") {
       return `
       <div
-                                class="flex gap-1 items-center px-2 py-1 bg-yellow-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-[#D97706]">
+                                class="flex gap-1 items-center px-2 py-1 bg-yellow-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-[#D97706]">
                                 <i class="fa-regular fa-circle-stop"></i>
                                 <p class="uppercase">help wanted</p>
                             </div>
@@ -136,29 +136,76 @@ const showLabes = (label) => {
     } else if (lab === "enhancement") {
       return `
       <div
-                                class="flex gap-1 items-center px-2 py-1 bg-green-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-green-700">
+                                class="flex gap-1 items-center px-2 py-1 bg-green-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-green-700">
                                 <i class="fa-regular fa-circle-stop"></i>
-                                <p class="uppercase">help wanted</p>
+                                <p class="uppercase">enhancement</p>
                             </div>
     `;
     } else if (lab === "good first issue") {
       return `
       <div
-                                class="flex gap-1 items-center px-2 py-1 bg-sky-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-sky-700">
+                                class="flex gap-1 items-center px-2 py-1 bg-sky-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-sky-700">
                                 <i class="fa-regular fa-circle-stop"></i>
-                                <p class="uppercase">help wanted</p>
+                                <p class="uppercase">good first issue</p>
                             </div>
     `;
     } else if (lab === "documentation") {
       return `
       <div
-                                class="flex gap-1 items-center px-2 py-1 bg-pink-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-pink-700">
+                                class="flex gap-1 items-center px-2 py-1 bg-pink-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-pink-700">
                                 <i class="fa-regular fa-circle-stop"></i>
-                                <p class="uppercase">help wanted</p>
+                                <p class="uppercase">documentation</p>
                             </div>
     `;
     } else {
       return " ";
     }
   });
+};
+
+// function for modal
+
+const fetchIssueForModal = (id) => {
+  fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`)
+    .then((res) => res.json())
+    .then((res) => showModal(res.data));
+};
+
+const showModal = (modal) => {
+  let modalContainer = document.getElementById("modalContainer");
+  modalContainer.innerHTML = `
+     <section>
+                        <div class="p-5 space-y-3 bg-white">
+                            <h1 class="font-bold text-24px "> ${modal.title}</h1>
+
+                            <div class="flex items-center gap-2">
+                                <span class="text-white bg-green-500 rounded-full px-4 py-1 text-[12px] ">${modal.status}</span>
+                                <span class="status"></span>
+                                <span class="text-[#64748B] text-[12px]"> Opened by ${modal.author}</span>
+                                <span class="status"></span>
+                                <span class="text-[#64748B] text-[12px]"> ${modal.createdAt}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                ${showLabes(modal.labels)}
+                            </div>
+
+                            <div>
+                                <p class="text-[#64748B]">${modal.description}</p>
+                            </div>
+                            <div class="p-3 bg-[#F8FAFC] rounded-md">
+                                <div class="grid grid-cols-2 justify-between">
+                                    <div>
+                                        <p class="text-[#64748B]">Assignee:</p>
+                                        <h2 class="font-bold">${modal.author}</h2>
+                                    </div>
+                                    <div>
+                                        <p class="text-[#64748B]"> Priority: </p>
+                                        <span> ${showStatus(modal.priority)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+  `;
+  let showModal = document.getElementById("my_modal").showModal();
 };
