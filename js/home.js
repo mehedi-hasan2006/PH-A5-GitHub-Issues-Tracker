@@ -50,28 +50,17 @@ fetchAllIssues();
 const displayAllIssues = (cards) => {
   let allIssuesCards = document.getElementById("allIssuesCards");
   allIssuesCards.innerHTML = "";
-  let issueCard = document.querySelectorAll(".issueCard");
-  // console.log(issueCard);
 
   cards.forEach((card) => {
-    // if(card.status === "open"){
-    //   issueCard.classList.add("border-t-4", "border-green-500")
-    // }
     let createElement = document.createElement("div");
     createElement.innerHTML = `
-        <div id="issueCard" class="issueCard bg-base-100 p-6 rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
+        <div id="issueCard" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.priority)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
                     <div class="flex justify-between">
-                        <div class="flex justify-between">
-                          <div class="flex">
-                              <img id="statusOpen" src="./assets/Open-Status.png" alt="">
-                              <img id="statusClose" src="./assets/Closed- Status .png" alt="">
+                          <div>
+                              ${showStatusIcon(card.priority)}
                           </div>
-
-                          <div class="flex">
-                              <p id="high" class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px] uppercase">HIGH</p>
-                              <p id="medium" class="text-[#F59E0B]  px-4 py-1 bg-[#FFF6D1] rounded-full font-medium text-[12px] uppercase"> medium </p>
-                              <p id="low" class="text-[#9CA3AF]  px-4 py-1 bg-[#EEEFF2] rounded-full font-medium text-[12px] uppercase"> low </p>
-                          </div>
+                          <div>
+                          ${showStatus(card.priority)}                                
                     </div>
                     </div>
                     <div class="space-y-2 mt-2">
@@ -81,13 +70,44 @@ const displayAllIssues = (cards) => {
                             ${createEl(card.labels)}
                         </div>
                         <div class="divider "></div>
-                        <div class="text-[#64748B]">
+                        <div class="text-[#64748B] text-[12px]">
                             <p> #1 by ${card.author} </p>
-                            <p> ${card.createdAt} </p>
+                            <p> ${card.createdAt.trim("T")} </p>
                         </div>
                     </div>
         </div>
     `;
     allIssuesCards.appendChild(createElement);
   });
+  let totalIssues = document.getElementById("totalIssues");
+  totalIssues.innerText = allIssuesCards.children.length + " Issues";
+};
+
+// function for card top border
+const cardTopBorder = (priority) => {
+  if (priority === "high" || priority === "medium") {
+    return "border-t-4 border-green-500";
+  } else {
+    return "border-t-4 border-violet-500";
+  }
+};
+
+// function for show status icon
+const showStatusIcon = (status) => {
+  if (status === "high" || status === "medium") {
+    return ` <img id="statusOpen" src="./assets/Open-Status.png" alt="">`;
+  } else {
+    return `<img id="statusClose" src="./assets/Closed- Status .png" alt="">`;
+  }
+};
+
+// function for show status high medium low
+const showStatus = (st) => {
+  if (st === "high") {
+    return `<p id="high" class="text-red-600  px-4 py-1 bg-red-100 rounded-full font-medium text-[12px] uppercase">HIGH</p>`;
+  } else if (st === "low") {
+    return `<p id="low" class="text-[#9CA3AF]  px-4 py-1 bg-[#EEEFF2] rounded-full font-medium text-[12px] uppercase"> low </p>`;
+  } else {
+    return `<p id="medium" class="text-[#F59E0B]  px-4 py-1 bg-[#FFF6D1] rounded-full font-medium text-[12px] uppercase"> medium </p>`;
+  }
 };
