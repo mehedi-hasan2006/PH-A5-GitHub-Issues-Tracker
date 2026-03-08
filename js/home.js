@@ -2,7 +2,7 @@
 let allBtn = document.getElementById("btn-all");
 let openBtn = document.getElementById("btn-open");
 let closedBtn = document.getElementById("btn-closed");
-
+/* 
 const createEl = (arr) => {
   let el = arr.map(
     (label) => `
@@ -14,6 +14,7 @@ const createEl = (arr) => {
   );
   return el.join(" ");
 };
+*/
 
 // button switching
 const switchBtn = (btn) => {
@@ -67,7 +68,7 @@ const displayAllIssues = (cards) => {
                         <h2 class="font-semibold text-[16px]"> ${card.title}</h2>
                         <p class="text-[#64748B] text-[12px]"> ${card.description} </p>
                         <div class="flex gap-2">
-                            ${createEl(card.labels)}
+                            ${showLabes(card.labels)}
                         </div>
                         <div class="divider "></div>
                         <div class="text-[#64748B] text-[12px]">
@@ -110,4 +111,54 @@ const showStatus = (st) => {
   } else {
     return `<p id="medium" class="text-[#F59E0B]  px-4 py-1 bg-[#FFF6D1] rounded-full font-medium text-[12px] uppercase"> medium </p>`;
   }
+};
+
+// function for show labels
+const showLabes = (label) => {
+  return label.map((lab) => {
+    lab = lab.toLowerCase();
+
+    if (lab === "bug") {
+      return `
+    <div
+                                class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-red-600">
+                                <i class="fa-solid fa-bug"></i>
+                                <p>BUG</p>
+                            </div>`;
+    } else if (lab === "help wanted") {
+      return `
+      <div
+                                class="flex gap-1 items-center px-2 py-1 bg-yellow-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-[#D97706]">
+                                <i class="fa-regular fa-circle-stop"></i>
+                                <p class="uppercase">help wanted</p>
+                            </div>
+    `;
+    } else if (lab === "enhancement") {
+      return `
+      <div
+                                class="flex gap-1 items-center px-2 py-1 bg-green-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-green-700">
+                                <i class="fa-regular fa-circle-stop"></i>
+                                <p class="uppercase">help wanted</p>
+                            </div>
+    `;
+    } else if (lab === "good first issue") {
+      return `
+      <div
+                                class="flex gap-1 items-center px-2 py-1 bg-sky-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-sky-700">
+                                <i class="fa-regular fa-circle-stop"></i>
+                                <p class="uppercase">help wanted</p>
+                            </div>
+    `;
+    } else if (lab === "documentation") {
+      return `
+      <div
+                                class="flex gap-1 items-center px-2 py-1 bg-pink-100 rounded-full font-medium text-[12px] border-red-200 border-2 text-pink-700">
+                                <i class="fa-regular fa-circle-stop"></i>
+                                <p class="uppercase">help wanted</p>
+                            </div>
+    `;
+    } else {
+      return " ";
+    }
+  });
 };
