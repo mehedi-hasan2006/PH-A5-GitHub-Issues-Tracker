@@ -2,19 +2,7 @@
 let allBtn = document.getElementById("btn-all");
 let openBtn = document.getElementById("btn-open");
 let closedBtn = document.getElementById("btn-closed");
-/* 
-const createEl = (arr) => {
-  let el = arr.map(
-    (label) => `
-    <div class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-red-600">
-      <i class="fa-solid fa-bug"></i>
-      <p class="uppercase"> ${label} </p>
-    </div>                    
-  `,
-  );
-  return el.join(" ");
-};
-*/
+let loading = document.getElementById("loading");
 
 // button switching
 const switchBtn = (btn) => {
@@ -83,6 +71,23 @@ const displayAllIssues = (cards) => {
   let totalIssues = document.getElementById("totalIssues");
   totalIssues.innerText = allIssuesCards.children.length + " Issues";
 };
+
+// function for  search
+const search = () => {
+  let searchInput = document.getElementById("searchText");
+
+  searchInput.addEventListener("input", () => {
+    const searchText = searchInput.value.trim();
+
+    fetch(
+      `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`,
+    )
+      .then((res) => res.json())
+      .then((data) => displayAllIssues(data.data));
+  });
+};
+
+search();
 
 // function for card top border
 const cardTopBorder = (priority) => {
@@ -164,13 +169,13 @@ const showLabes = (label) => {
 };
 
 // function for modal
-
 const fetchIssueForModal = (id) => {
   fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`)
     .then((res) => res.json())
     .then((res) => showModal(res.data));
 };
 
+// fetch modal
 const showModal = (modal) => {
   let modalContainer = document.getElementById("modalContainer");
   modalContainer.innerHTML = `
@@ -209,3 +214,6 @@ const showModal = (modal) => {
   `;
   let showModal = document.getElementById("my_modal").showModal();
 };
+
+// function for  loading start state
+const startLoading = () => {};
