@@ -159,52 +159,54 @@ const showStatus = (st) => {
 
 // function for show labels
 const showLabes = (label) => {
-  return label.map((lab) => {
-    lab = lab.toLowerCase();
+  return label
+    .map((lab) => {
+      lab = lab.toLowerCase();
 
-    if (lab === "bug") {
-      return `
+      if (lab === "bug") {
+        return `
     <div
                                 class="flex gap-1 items-center px-2 py-1 bg-red-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-red-600">
                                 <i class="fa-solid fa-bug"></i>
                                 <p>BUG</p>
                             </div>`;
-    } else if (lab === "help wanted") {
-      return `
+      } else if (lab === "help wanted") {
+        return `
       <div
                                 class="flex gap-1 items-center px-2 py-1 bg-yellow-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-[#D97706]">
                                 <i class="fa-regular fa-circle-stop"></i>
                                 <p class="uppercase">help wanted</p>
                             </div>
     `;
-    } else if (lab === "enhancement") {
-      return `
+      } else if (lab === "enhancement") {
+        return `
       <div
                                 class="flex gap-1 items-center px-2 py-1 bg-green-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-green-700">
                                 <i class="fa-regular fa-circle-stop"></i>
                                 <p class="uppercase">enhancement</p>
                             </div>
     `;
-    } else if (lab === "good first issue") {
-      return `
+      } else if (lab === "good first issue") {
+        return `
       <div
                                 class="flex gap-1 items-center px-2 py-1 bg-sky-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-sky-700">
                                 <i class="fa-regular fa-circle-stop"></i>
                                 <p class="uppercase">good first issue</p>
                             </div>
     `;
-    } else if (lab === "documentation") {
-      return `
+      } else if (lab === "documentation") {
+        return `
       <div
                                 class="flex gap-1 items-center px-2 py-1 bg-pink-100 rounded-full font-medium text-[10px] border-red-200 border-2 text-pink-700">
                                 <i class="fa-regular fa-circle-stop"></i>
                                 <p class="uppercase">documentation</p>
                             </div>
     `;
-    } else {
-      return " ";
-    }
-  });
+      } else {
+        return "";
+      }
+    })
+    .join("");
 };
 
 // function for modal
@@ -262,7 +264,7 @@ const showModal = (modal) => {
                                 <div class="grid grid-cols-2 justify-between">
                                     <div>
                                         <p class="text-[#64748B]">Assignee:</p>
-                                        <h2 class="font-bold">${modal.assignee? modal.assignee: "Not Found"} </h2>
+                                        <h2 class="font-bold">${modal.assignee ? modal.assignee : "Not Found"} </h2>
                                     </div>
                                     <div>
                                         <p class="text-[#64748B]"> Priority: </p>
