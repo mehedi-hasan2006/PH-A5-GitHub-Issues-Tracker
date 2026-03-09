@@ -4,6 +4,15 @@ let openBtn = document.getElementById("btn-open");
 let closedBtn = document.getElementById("btn-closed");
 let loading = document.getElementById("loading");
 
+// function for  loading start state
+const startLoading = () => {
+  loading.classList.remove("hidden");
+};
+
+const endLoading = () => {
+  loading.classList.add("hidden");
+};
+
 // button switching
 const switchBtn = (btn) => {
   allBtn.classList.remove("btn-primary", "text-white");
@@ -28,10 +37,12 @@ const switchBtn = (btn) => {
 
 // fetch all issues
 const fetchAllIssues = async () => {
+  startLoading();
   const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
   const res = await fetch(url);
   const details = await res.json();
   displayAllIssues(details.data);
+  endLoading();
 };
 
 fetchAllIssues();
@@ -86,7 +97,6 @@ const search = () => {
       .then((data) => displayAllIssues(data.data));
   });
 };
-
 search();
 
 // function for card top border
@@ -170,9 +180,11 @@ const showLabes = (label) => {
 
 // function for modal
 const fetchIssueForModal = (id) => {
+  startLoading();
   fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`)
     .then((res) => res.json())
     .then((res) => showModal(res.data));
+  endLoading();
 };
 
 // fetch modal
@@ -214,6 +226,3 @@ const showModal = (modal) => {
   `;
   let showModal = document.getElementById("my_modal").showModal();
 };
-
-// function for  loading start state
-const startLoading = () => {};
