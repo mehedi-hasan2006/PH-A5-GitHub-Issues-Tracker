@@ -35,7 +35,7 @@ const displayAllIssues = (cards) => {
   cards.forEach((card) => {
     let createElement = document.createElement("div");
     createElement.innerHTML = `
-        <div id="issueCard" onclick="fetchIssueForModal(${card.id})" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.priority)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
+        <div id="issueCard" onclick="fetchIssueForModal(${card.id})" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.status)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
                     <div class="flex justify-between">
                           <div>
                               ${showStatusIcon(card.priority)}
@@ -66,6 +66,7 @@ const displayAllIssues = (cards) => {
 
 // button switching
 const switchBtn = (btn) => {
+  startLoading();
   allBtn.classList.remove("btn-primary", "text-white");
   openBtn.classList.remove("btn-primary", "text-white");
   closedBtn.classList.remove("btn-primary", "text-white");
@@ -74,23 +75,28 @@ const switchBtn = (btn) => {
   openBtn.classList.add("text-[#64748B]");
   closedBtn.classList.add("text-[#64748B]");
 
-  if (btn === "openBtn") {
-    openBtn.classList.add("btn-primary", "text-white");
-    openBtn.classList.remove("text-[#64748B]");
+  setTimeout(() => {
+    let filterIssue = [];
 
-    const openIssues = allIssues.filter((issue) => issue.status === "open");
-    displayAllIssues(openIssues);
-  } else if (btn === "closedBtn") {
-    closedBtn.classList.add("btn-primary", "text-white");
-    closedBtn.classList.remove("text-[#64748B]");
+    if (btn === "openBtn") {
+      openBtn.classList.add("btn-primary", "text-white");
+      openBtn.classList.remove("text-[#64748B]");
 
-    const closedIssue = allIssues.filter((issue) => issue.status === "closed");
-    displayAllIssues(closedIssue);
-  } else {
-    allBtn.classList.add("btn-primary", "text-white");
-    allBtn.classList.remove("text-[#64748B]");
-    displayAllIssues(allIssues);
-  }
+      filterIssue = allIssues.filter((issue) => issue.status === "open");
+    } else if (btn === "closedBtn") {
+      closedBtn.classList.add("btn-primary", "text-white");
+      closedBtn.classList.remove("text-[#64748B]");
+
+      filterIssue = allIssues.filter((issue) => issue.status === "closed");
+    } else {
+      allBtn.classList.add("btn-primary", "text-white");
+      allBtn.classList.remove("text-[#64748B]");
+      filterIssue = allIssues;
+    }
+
+    displayAllIssues(filterIssue);
+    endLoading();
+  }, 200);
 };
 
 // function for  search
@@ -104,19 +110,22 @@ const search = () => {
       displayAllIssues(allIssues);
       return;
     }
-
+    startLoading();
     fetch(
       `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`,
     )
       .then((res) => res.json())
-      .then((data) => displayAllIssues(data.data));
+      .then((data) => {
+        displayAllIssues(data.data);
+        endLoading();
+      });
   });
 };
 search();
 
 // function for card top border
-const cardTopBorder = (priority) => {
-  if (priority === "high" || priority === "medium") {
+const cardTopBorder = (status) => {
+  if (status === "open") {
     return "border-t-4 border-green-500";
   } else {
     return "border-t-4 border-violet-500";
@@ -198,8 +207,10 @@ const fetchIssueForModal = (id) => {
   startLoading();
   fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`)
     .then((res) => res.json())
-    .then((res) => showModal(res.data));
-  endLoading();
+    .then((res) => {
+      showModal(res.data);
+      endLoading();
+    });
 };
 
 // fetch modal
