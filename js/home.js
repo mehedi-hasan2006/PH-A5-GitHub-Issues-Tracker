@@ -38,7 +38,7 @@ const displayAllIssues = (cards) => {
         <div id="issueCard" onclick="fetchIssueForModal(${card.id})" class="issueCard bg-base-100 p-6 ${cardTopBorder(card.status)} rounded-sm  h-[290px]  shadow-lg  cursor-pointer transition-all duration-500 hover:scale-105">
                     <div class="flex justify-between">
                           <div>
-                              ${showStatusIcon(card.priority)}
+                              ${showStatusIcon(card.status)}
                           </div>
                           <div>
                           ${showStatus(card.priority)}                                
@@ -53,7 +53,7 @@ const displayAllIssues = (cards) => {
                         <div class="divider "></div>
                         <div class="text-[#64748B] text-[12px]">
                             <p> #1 by ${card.author} </p>
-                            <p> ${card.createdAt.trim("T")} </p>
+                            <p> ${setTime(card.createdAt)} </p>
                         </div>
                     </div>
         </div>
@@ -106,10 +106,15 @@ const search = () => {
   searchInput.addEventListener("input", () => {
     const searchText = searchInput.value.trim();
 
-    if (searchText === "") {
-      displayAllIssues(allIssues);
-      return;
-    }
+    startLoading();
+    setTimeout(() => {
+      if (searchText === "") {
+        displayAllIssues(allIssues);
+        endLoading();
+        return;
+      }
+    }, 200);
+
     startLoading();
     fetch(
       `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`,
@@ -128,13 +133,13 @@ const cardTopBorder = (status) => {
   if (status === "open") {
     return "border-t-4 border-green-500";
   } else {
-    return "border-t-4 border-violet-500";
+    return "border-t-4 border-purple-500";
   }
 };
 
 // function for show status icon
 const showStatusIcon = (status) => {
-  if (status === "high" || status === "medium") {
+  if (status === "open") {
     return ` <img id="statusOpen" src="./assets/Open-Status.png" alt="">`;
   } else {
     return `<img id="statusClose" src="./assets/Closed- Status .png" alt="">`;
@@ -213,6 +218,24 @@ const fetchIssueForModal = (id) => {
     });
 };
 
+// function for set time
+const setTime = (date) => {
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "numeric",
+    year: "numeric",
+  });
+};
+
+// function for modal status text
+const modalStatus = (st) => {
+  if (st === "open") {
+    return "bg-green-500";
+  } else {
+    return "bg-red-500";
+  }
+};
+
 // fetch modal
 const showModal = (modal) => {
   let modalContainer = document.getElementById("modalContainer");
@@ -222,11 +245,11 @@ const showModal = (modal) => {
                             <h1 class="font-bold text-24px "> ${modal.title}</h1>
 
                             <div class="flex items-center gap-2">
-                                <span class="text-white bg-green-500 rounded-full px-4 py-1 text-[12px] ">${modal.status}</span>
+                                <span class="text-white ${modalStatus(modal.status)} rounded-full px-4 py-1 text-[12px] ">${modal.status}</span>
                                 <span class="status"></span>
                                 <span class="text-[#64748B] text-[12px]"> Opened by ${modal.author}</span>
                                 <span class="status"></span>
-                                <span class="text-[#64748B] text-[12px]"> ${modal.createdAt}</span>
+                                <span class="text-[#64748B] text-[12px]"> ${setTime(modal.createdAt)}</span>
                             </div>
                             <div class="flex gap-2">
                                 ${showLabes(modal.labels)}
@@ -239,7 +262,7 @@ const showModal = (modal) => {
                                 <div class="grid grid-cols-2 justify-between">
                                     <div>
                                         <p class="text-[#64748B]">Assignee:</p>
-                                        <h2 class="font-bold">${modal.author}</h2>
+                                        <h2 class="font-bold">${modal.assignee? modal.assignee: "Not Found"} </h2>
                                     </div>
                                     <div>
                                         <p class="text-[#64748B]"> Priority: </p>
