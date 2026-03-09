@@ -4,6 +4,8 @@ let openBtn = document.getElementById("btn-open");
 let closedBtn = document.getElementById("btn-closed");
 let loading = document.getElementById("loading");
 
+let allIssues = [];
+
 // function for  loading start state
 const startLoading = () => {
   loading.classList.remove("hidden");
@@ -13,35 +15,14 @@ const endLoading = () => {
   loading.classList.add("hidden");
 };
 
-// button switching
-const switchBtn = (btn) => {
-  allBtn.classList.remove("btn-primary", "text-white");
-  openBtn.classList.remove("btn-primary", "text-white");
-  closedBtn.classList.remove("btn-primary", "text-white");
-
-  allBtn.classList.add("text-[#64748B]");
-  openBtn.classList.add("text-[#64748B]");
-  closedBtn.classList.add("text-[#64748B]");
-
-  if (btn === "openBtn") {
-    openBtn.classList.add("btn-primary", "text-white");
-    openBtn.classList.remove("text-[#64748B]");
-  } else if (btn === "closedBtn") {
-    closedBtn.classList.add("btn-primary", "text-white");
-    closedBtn.classList.remove("text-[#64748B]");
-  } else {
-    allBtn.classList.add("btn-primary", "text-white");
-    allBtn.classList.remove("text-[#64748B]");
-  }
-};
-
 // fetch all issues
 const fetchAllIssues = async () => {
   startLoading();
   const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
   const res = await fetch(url);
   const details = await res.json();
-  displayAllIssues(details.data);
+  allIssues = details.data;
+  displayAllIssues(allIssues);
   endLoading();
 };
 
@@ -83,12 +64,46 @@ const displayAllIssues = (cards) => {
   totalIssues.innerText = allIssuesCards.children.length + " Issues";
 };
 
+// button switching
+const switchBtn = (btn) => {
+  allBtn.classList.remove("btn-primary", "text-white");
+  openBtn.classList.remove("btn-primary", "text-white");
+  closedBtn.classList.remove("btn-primary", "text-white");
+
+  allBtn.classList.add("text-[#64748B]");
+  openBtn.classList.add("text-[#64748B]");
+  closedBtn.classList.add("text-[#64748B]");
+
+  if (btn === "openBtn") {
+    openBtn.classList.add("btn-primary", "text-white");
+    openBtn.classList.remove("text-[#64748B]");
+
+    const openIssues = allIssues.filter((issue) => issue.status === "open");
+    displayAllIssues(openIssues);
+  } else if (btn === "closedBtn") {
+    closedBtn.classList.add("btn-primary", "text-white");
+    closedBtn.classList.remove("text-[#64748B]");
+
+    const closedIssue = allIssues.filter((issue) => issue.status === "closed");
+    displayAllIssues(closedIssue);
+  } else {
+    allBtn.classList.add("btn-primary", "text-white");
+    allBtn.classList.remove("text-[#64748B]");
+    displayAllIssues(allIssues);
+  }
+};
+
 // function for  search
 const search = () => {
   let searchInput = document.getElementById("searchText");
 
   searchInput.addEventListener("input", () => {
     const searchText = searchInput.value.trim();
+
+    if (searchText === "") {
+      displayAllIssues(allIssues);
+      return;
+    }
 
     fetch(
       `https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`,
